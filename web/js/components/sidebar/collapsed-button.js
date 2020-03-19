@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
-class CollapsedButton extends React.Component {
+class CollapsedButton extends PureComponent {
   render() {
     const {
       isMobile,
+      isDistractionFreeModeActive,
       isCollapsed,
       numberOfLayers,
-      onclick
+      onclick,
     } = this.props;
 
     return (
       <div
         id="productsHoldertoggleButtonHolder"
         className="toggleButtonHolder"
-        style={!isCollapsed ? { display: 'none' } : {}}
+        style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
         <a
           id="accordionTogglerButton"
@@ -28,16 +29,17 @@ class CollapsedButton extends React.Component {
           <FontAwesomeIcon icon={faLayerGroup} />
           {isMobile
             ? (
-              <span className='layer-count mobile'>
+              <span className="layer-count mobile">
                 {numberOfLayers.toString()}
               </span>
             )
             : (
-              <span className='layer-count '>
-                {numberOfLayers.toString()} Layers
+              <span className="layer-count ">
+                {numberOfLayers.toString()}
+                {' '}
+                Layers
               </span>
-            )
-          }
+            )}
         </a>
       </div>
     );
@@ -45,9 +47,10 @@ class CollapsedButton extends React.Component {
 }
 CollapsedButton.propTypes = {
   isCollapsed: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
-  onclick: PropTypes.func
+  onclick: PropTypes.func,
 };
 
 export default CollapsedButton;

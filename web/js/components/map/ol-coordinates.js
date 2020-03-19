@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Coordinates from './coordinates';
-import util from '../../util/util';
 import { transform } from 'ol/proj';
+import { Coordinates } from './coordinates';
+import util from '../../util/util';
 
-class OlCoordinates extends React.Component {
+export class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +12,7 @@ class OlCoordinates extends React.Component {
       latitude: null,
       longitude: null,
       crs: null,
-      format: null
+      format: null,
     };
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
@@ -23,6 +23,11 @@ class OlCoordinates extends React.Component {
   registerMouseListeners() {
     this.props.mouseEvents.on('mousemove', this.mouseMove);
     this.props.mouseEvents.on('mouseout', this.mouseOut);
+  }
+
+  componentWillUnmount() {
+    this.props.mouseEvents.off('mousemove', this.mouseMove);
+    this.props.mouseEvents.off('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -52,7 +57,7 @@ class OlCoordinates extends React.Component {
       format: util.getCoordinateFormat(),
       latitude: pcoord[1],
       longitude: pcoord[0],
-      crs
+      crs,
     });
   }
 
@@ -84,7 +89,7 @@ class OlCoordinates extends React.Component {
     }
 
     return (
-      <div id='ol-coords-case'>
+      <div id="ol-coords-case">
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
@@ -98,7 +103,5 @@ class OlCoordinates extends React.Component {
 }
 
 OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired
+  mouseEvents: PropTypes.object.isRequired,
 };
-
-export default OlCoordinates;
